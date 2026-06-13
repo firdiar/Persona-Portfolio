@@ -3,14 +3,32 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | GtionProject_Template</title>
+    <title>Firdiansyah R - Stylized Portfolio</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%232B6FBA'/><text x='16' y='22' text-anchor='middle' font-family='Arial,sans-serif' font-weight='bold' font-size='18' fill='white'>FR</text></svg>">
     <link rel="stylesheet" href="TemplateData/style.css">
   </head>
   <body>
     <div id="unity-container">
       <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
       <div id="unity-loading-overlay">
-        <div id="unity-loading-text">Loading... 0%</div>
+        <div id="unity-loading-center">
+          <div id="unity-portfolio-title">✦ Firdi Stylized Portfolio ✦</div>
+          <div id="unity-loader">
+            <div id="unity-loader-gem"></div>
+            <div class="sparkle" style="left:5%;animation-delay:0s;animation-duration:3.5s"></div>
+            <div class="sparkle" style="left:20%;animation-delay:1.2s;animation-duration:4.2s"></div>
+            <div class="sparkle" style="left:38%;animation-delay:0.6s;animation-duration:3.8s"></div>
+            <div class="sparkle" style="left:55%;animation-delay:2s;animation-duration:4.5s"></div>
+            <div class="sparkle" style="left:72%;animation-delay:1.5s;animation-duration:3.2s"></div>
+            <div class="sparkle" style="left:88%;animation-delay:2.5s;animation-duration:4s"></div>
+            <div class="sparkle" style="left:45%;animation-delay:0.9s;animation-duration:3.6s"></div>
+            <div class="sparkle" style="left:65%;animation-delay:1.8s;animation-duration:3.9s"></div>
+          </div>
+          <div id="unity-loading-text">Loading</div>
+          <div id="unity-progress-track"><div id="unity-progress-bar"></div></div>
+          <div id="unity-loading-percent">0%</div>
+          <div id="unity-fallback">Stuck? Try <a href="https://firdiar.github.io/Portfolio-Lite/" target="_blank">Portfolio Lite</a></div>
+        </div>
       </div>
       <div id="unity-warning"> </div>
       <div id="unity-footer">
@@ -47,21 +65,36 @@
         frameworkUrl: buildUrl + "/Build.framework.js",
         codeUrl: buildUrl + "/Build.wasm",
         streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "GtionProject_Template",
-        productVersion: "0.1.0",
+        companyName: "Gtion Production",
+        productName: "Firdiansyah R - Stylized Portfolio",
+        productVersion: "1.0.0",
         showBanner: unityShowBanner,
       };
 
       var loadingText = document.querySelector("#unity-loading-text");
+      var loadingPercent = document.querySelector("#unity-loading-percent");
+      var progressBar = document.querySelector("#unity-progress-bar");
+      var fallback = document.querySelector("#unity-fallback");
+
+      var dotCount = 0;
+      setInterval(function() {
+        dotCount = (dotCount + 1) % 4;
+        loadingText.textContent = "Loading" + ".".repeat(dotCount);
+      }, 500);
 
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
-          loadingText.textContent = "Loading... " + Math.round(progress * 100) + "%";
+          var pct = Math.round(progress * 100);
+          loadingPercent.textContent = pct + "%";
+          progressBar.style.width = pct + "%";
         }).then((unityInstance) => {
-          document.querySelector("#unity-loading-overlay").style.display = "none";
+          var overlay = document.querySelector("#unity-loading-overlay");
+          overlay.classList.add("fade-out");
+          setTimeout(function() {
+            overlay.style.display = "none";
+          }, 600);
           document.querySelector("#unity-fullscreen-button").onclick = () => {
             unityInstance.SetFullscreen(1);
           };
